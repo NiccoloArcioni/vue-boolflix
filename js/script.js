@@ -2,6 +2,8 @@ var app = new Vue ({
     el: '#root',
     data: {
         searchInput: '',
+        mainPath: 'https://image.tmdb.org/t/p/',
+        posterWidth: 'w342',
         moviesArray: [],
         seriesArray: []
     },
