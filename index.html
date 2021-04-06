@@ -29,7 +29,9 @@
                         <h4>Titolo: {{movie.title}}</h4>
                         <h4>Titolo originale: {{movie.original_title}}</h4>
                         <p>Lingua: {{movie.original_language}}</p>
-                        <p>Voto: {{movie.vote_average}}</p>
+                        <p>Voto: 
+                            <i class="fas fa-star yellow" v-for='number in (Math.round((movie.vote_average) / 2))'></i>
+                        </p>
                     </div>
                 </li>
             </ul>

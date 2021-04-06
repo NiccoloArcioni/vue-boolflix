@@ -25,3 +25,7 @@
 .ms_movies_container ul li {
     margin: 30px 20px;
 }
+
+i.fas.fa-star.yellow {
+    color: rgb(250, 206, 93);
+}

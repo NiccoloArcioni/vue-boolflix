@@ -17,6 +17,6 @@ var app = new Vue ({
                     app.moviesArray = result.data.results;
                 })
             this.searchInput = '';
-        }
+        },
     }
 })
