@@ -15,6 +15,11 @@ var app = new Vue ({
                 })
                 .then(function (result) {
                     app.moviesArray = result.data.results;
+                    app.moviesArray.forEach(element => {
+                        if(element.original_language == 'en') {
+                            element.original_language = 'gb';
+                        }
+                    });
                 })
             this.searchInput = '';
         },
