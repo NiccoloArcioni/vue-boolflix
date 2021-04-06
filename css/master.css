@@ -22,7 +22,8 @@
     margin-right: 15px;
 }
 
-.ms_movies_container ul li {
+.ms_movies_container ul li,
+.ms_tvseries_container ul li {
     margin: 30px 20px;
 }
 
