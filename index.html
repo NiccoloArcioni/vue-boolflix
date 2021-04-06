@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+        crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/master.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <!-- production version, optimized for size and speed -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+    <title>BoolFlix</title>
+</head>
+<body>
+    
+    <div id="root">
+        <div class="ms_searchbar">
+            <input type="text" placeholder="Cerca" v-model='searchInput' @keyup.enter="searchMovies()">
+            <button @click="searchMovies()"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="ms_movies_container">
+            <ul>
+                <li v-for='movie in moviesArray'>
+                    <div class="ms_movie_container">
+                        <h4>Titolo: {{movie.title}}</h4>
+                        <h4>Titolo originale: {{movie.original_title}}</h4>
+                        <p>Lingua: {{movie.original_language}}</p>
+                        <p>Voto: {{movie.vote_average}}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
