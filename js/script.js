@@ -9,7 +9,8 @@ var app = new Vue ({
     },
     methods: {
         searchMoviesAndSeries: function() {
-            axios
+            if(this.searchInput.length >= 1) {
+                axios
                 .get('https://api.themoviedb.org/3/search/movie?api_key=02911b373bf1ff255f89a4eb00028d32', { 
                     params: {
                         query: app.searchInput,
@@ -30,7 +31,7 @@ var app = new Vue ({
                         }
                     });
                 })
-            axios
+                axios
                 .get('https://api.themoviedb.org/3/search/tv?api_key=02911b373bf1ff255f89a4eb00028d32', {
                     params: {
                         query: app.searchInput,
@@ -51,7 +52,18 @@ var app = new Vue ({
                         }
                     });
                 })
-            this.searchInput = '';
+                this.searchInput = '';
+            }
         },
+        showInfo: function(index) {
+            let movie = document.getElementById(`${index}`);
+            movie.querySelector('.ms_main_poster').classList.remove('active');
+            movie.querySelector('.ms_infos').classList.add('active');
+        },
+        closeInfo: function (index) {
+            let movie = document.getElementById(`${index}`);
+            movie.querySelector('.ms_infos').classList.remove('active');
+            movie.querySelector('.ms_main_poster').classList.add('active');
+        }
     }
 })

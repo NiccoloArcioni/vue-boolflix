@@ -18,43 +18,56 @@
 <body>
     
     <div id="root">
-        <div class="ms_searchbar">
-            <input type="text" placeholder="Cerca" v-model='searchInput' @keyup.enter="searchMoviesAndSeries()">
-            <button @click="searchMoviesAndSeries()"><i class="fas fa-search"></i></button>
-        </div>
-        <div class="ms_movies_container">
-            <h2>Movies</h2>
-            <ul>
-                <li v-for='movie in moviesArray'>
-                    <div class="ms_movie_container">
-                        <img :src="mainPath + posterWidth + movie.poster_path" alt="">
-                        <h4>Titolo: {{movie.title}}</h4>
-                        <h4>Titolo originale: {{movie.original_title}}</h4>
-                        <img :src='"https://www.countryflags.io/" + movie.original_language + "/shiny/64.png"' alt="movie.original_language">
-                        <p>Voto: 
-                            <i class="fas fa-star yellow" v-for='number in (Math.round((movie.vote_average) / 2))'></i>
-                        </p>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="ms_tvseries_container">
-            <h2>Television Series</h2>
-            <ul>
-                <li v-for='serie in seriesArray'>
-                    <div class="ms_serie_container">
-                        <img :src="mainPath + posterWidth + serie.poster_path" alt="">
-                        <h4>Titolo: {{serie.name}}</h4>
-                        <h4>Titolo originale: {{serie.original_name}}</h4>
-                        <img :src='"https://www.countryflags.io/" + serie.original_language + "/shiny/64.png"'
-                            alt="serie.original_language">
-                        <p>Voto:
-                            <i class="fas fa-star yellow" v-for='number in (Math.round((serie.vote_average) / 2))'></i>
-                        </p>
-                    </div>
-                </li>
-            </ul>
-        </div>
+
+        <header>
+            <img src="img/boolflix.png" alt="BoolFlix logo">
+            <div class="ms_searchbar">
+                <input type="text" placeholder="Cerca" v-model='searchInput' @keyup.enter="searchMoviesAndSeries()">
+                <button @click="searchMoviesAndSeries()"><i class="fas fa-search"></i></button>
+            </div>
+        </header>
+
+        <main>
+            <div class="ms_movies_container">
+                <ul>
+                    <li v-for='(movie, index) in moviesArray' :id='index' @mouseenter='showInfo(index)' @mouseleave='closeInfo(index)'>
+                        <div class="ms_movie_container">
+                            <img :src="mainPath + posterWidth + movie.poster_path" class='ms_main_poster active' alt="">
+                            <div class="ms_infos">
+                                <h3>Titolo: {{movie.title}}</h3>
+                                <h3>Titolo originale: {{movie.original_title}}</h3>
+                                <img :src='"https://www.countryflags.io/" + movie.original_language + "/shiny/64.png"'
+                                    alt="movie.original_language">
+                                <h4>Voto:
+                                    <i class="fas fa-star yellow" v-for='number in (Math.round((movie.vote_average) / 2))'></i>
+                                </h4>
+                                <h4 v-if='movie.overview.length >= 1'>Overview: <span>{{movie.overview}}</span></h4>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="ms_tvseries_container">
+                <ul>
+                    <li v-for='(serie, index) in seriesArray' :id='index + moviesArray.length' @mouseenter='showInfo(index + moviesArray.length)' @mouseleave='closeInfo(index + moviesArray.length)'>
+                        <div class="ms_serie_container">
+                            <img :src="mainPath + posterWidth + serie.poster_path" class='ms_main_poster active' alt="">
+                            <div class="ms_infos">
+                                <h3>Titolo: {{serie.name}}</h3>
+                                <h3>Titolo originale: {{serie.original_name}}</h3>
+                                <img :src='"https://www.countryflags.io/" + serie.original_language + "/shiny/64.png"'
+                                    alt="serie.original_language">
+                                <h4>Voto:
+                                    <i class="fas fa-star yellow" v-for='number in (Math.round((serie.vote_average) / 2))'></i>
+                                </h4>
+                                <h4 v-if='serie.overview.length >= 1'>Overview: <span>{{serie.overview}}</span></h4>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </main>
+        
     </div>
 
     <script src="js/script.js"></script>
