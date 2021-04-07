@@ -88,3 +88,17 @@ img.ms_main_poster.active,
 .ms_infos.active {
     display: inline-block;
 }
+
+.ms_genres ul {
+    display: inline-block;
+    list-style: none;
+}
+.ms_genres ul li {
+    margin: 0 3px 0 0;
+}
+.ms_genres li:not(:last-child)::after {
+    content: ',';
+} 
+.ms_genres li:last-child::after {
+    content: '.';
+}

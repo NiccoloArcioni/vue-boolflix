@@ -36,13 +36,18 @@
                             <div class="ms_infos">
                                 <h3>Titolo: {{movie.title}}</h3>
                                 <h3>Titolo originale: {{movie.original_title}}</h3>
+                                <div class="ms_genres" v-if='detailsReady'>
+                                    <span>Genres:</span>
+                                    <ul>
+                                        <li v-for='genre in movie.genres'>{{genre.name}}</li>
+                                    </ul>
+                                </div>
                                 <img :src='"https://www.countryflags.io/" + movie.original_language + "/shiny/64.png"'
                                     alt="movie.original_language">
                                 <h4>Voto:
                                     <i class="fas fa-star yellow" v-for='number in (Math.round((movie.vote_average) / 2))'></i><i class="far fa-star yellow" v-for='number in  (5 - (Math.round((movie.vote_average) / 2)))'></i>
                                 </h4>
                                 <h4 v-if='movie.overview.length >= 1'>Overview: <span>{{movie.overview}}</span></h4>
-                                <h4>Genres: <span v-for='genre in movie.genres'>{{genre.name}}</span></h4>
                             </div>
                         </div>
                     </li>

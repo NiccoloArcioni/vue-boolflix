@@ -5,7 +5,8 @@ var app = new Vue ({
         mainPath: 'https://image.tmdb.org/t/p/',
         posterWidth: 'w342',
         moviesArray: [],
-        seriesArray: []
+        seriesArray: [],
+        detailsReady: false
     },
     methods: {
         searchMoviesAndSeries: function() {
@@ -46,6 +47,9 @@ var app = new Vue ({
             } else {
                 movieOrTvSeries = 'tv';
             }
+            setTimeout(() => {
+                app.detailsReady = true;
+            }, 500);
             array.forEach(element => {
                 /* genres */
                 axios
@@ -69,7 +73,7 @@ var app = new Vue ({
                     .then(function (result) {
                         element.cast = result.data.cast;
                     })
-            })
+                })
         },
         showInfo: function(index) {
             let movie_tvSeries = document.getElementById(`${index}`);
