@@ -10,6 +10,7 @@ var app = new Vue ({
     },
     methods: {
         searchMoviesAndSeries: function() {
+            app.detailsReady = false;
             if(this.searchInput.length >= 1) {
                 axios
                 .get('https://api.themoviedb.org/3/search/movie?', { 
