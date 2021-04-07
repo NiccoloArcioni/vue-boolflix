@@ -27,6 +27,19 @@ header img {
     align-items: center;
 }
 
+.ms_searchbar .ms_filter {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    text-align: center;
+}
+.ms_searchbar .ms_filter label {
+    color: #fff;
+}
+.ms_searchbar .ms_filter select {
+    margin-bottom: 8px;
+}
+
 .ms_searchbar input,
 .ms_searchbar button {
     padding: 5px 10px;

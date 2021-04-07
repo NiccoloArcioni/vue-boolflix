@@ -4,9 +4,34 @@ var app = new Vue ({
         searchInput: '',
         mainPath: 'https://image.tmdb.org/t/p/',
         posterWidth: 'w342',
+        totalGenresList: [],
+        filmFilter: '',
+        tvSeriesFilter: '',
         moviesArray: [],
         seriesArray: [],
         detailsReady: false
+    },
+    created() {
+        axios
+            .get('https://api.themoviedb.org/3/genre/movie/list?', {
+                params: {
+                    api_key: '02911b373bf1ff255f89a4eb00028d32',
+                    language: 'it-IT'
+                }
+            })
+            .then(function (result) {
+                app.totalGenresList.push(result.data.genres);
+            })
+        axios
+            .get('https://api.themoviedb.org/3/genre/tv/list?', {
+                params: {
+                    api_key: '02911b373bf1ff255f89a4eb00028d32',
+                    language: 'it-IT'
+                }
+            })
+            .then(function (result) {
+                app.totalGenresList.push(result.data.genres);
+            })
     },
     methods: {
         searchMoviesAndSeries: function() {
@@ -39,6 +64,7 @@ var app = new Vue ({
                     app.getDetails(app.seriesArray);
                 })
                 this.searchInput = '';
+                
             }
         },
         getDetails: function(array) {
@@ -98,6 +124,14 @@ var app = new Vue ({
                     element.original_language = 'kr';
                 }
             })
+        },
+        setFilmFilter: function() {
+            let value = document.getElementById('filmPicker').value;
+            this.filmFilter = value;
+        },
+        setTvSeriesFilter: function () {
+            let value = document.getElementById('tvSeriesPicker').value;
+            this.tvSeriesFilter = value;
         }
     }
 })

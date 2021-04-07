@@ -22,6 +22,20 @@
         <header>
             <img src="img/boolflix.png" alt="BoolFlix logo">
             <div class="ms_searchbar">
+                <div class="ms_filter">
+                    <label for="film">Filtra film</label>
+                    <select name="film" id="filmPicker" @change='setFilmFilter()'>
+                        <option value="">All</option>
+                        <option v-for='genre in totalGenresList[0]' :value="genre.name">{{genre.name}}</option>
+                    </select>
+                </div>
+                <div class="ms_filter">
+                    <label for="tvSeries">Filtra TV Series</label>
+                    <select name="tvSeries" id="tvSeriesPicker" @change='setTvSeriesFilter()'>
+                        <option value="">All</option>
+                        <option v-for='genre in totalGenresList[1]' :value="genre.name">{{genre.name}}</option>
+                    </select>
+                </div>
                 <input type="text" placeholder="Cerca" v-model='searchInput' @keyup.enter="searchMoviesAndSeries()">
                 <button @click="searchMoviesAndSeries()"><i class="fas fa-search"></i></button>
             </div>
