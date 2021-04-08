@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+        integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+        crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/master_bonus.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
+    <!-- development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <!-- production version, optimized for size and speed -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+    <title>BoolFlix</title>
+</head>
+<body>
+
+    <div id="root">
+
+        <header>
+            <img src="../img/boolflix.png" alt="BoolFlix logo">
+            <div class="ms_searchbar">
+                <div class="ms_filter" v-if='detailsReady'>
+                    <label for="film">Filtra film</label>
+                    <select name="film" id="filmPicker" @change='setFilmFilter()'>
+                        <option value="All">All</option>
+                        <option v-for='genre in totalGenresList.movie' :value="genre.id">{{genre.name}}</option>
+                    </select>
+                </div>
+                <div class="ms_filter" v-if='detailsReady'>
+                    <label for="tvSeries">Filtra TV Series</label>
+                    <select name="tvSeries" id="tvSeriesPicker" @change='setTvSeriesFilter()'>
+                        <option value="All">All</option>
+                        <option v-for='genre in totalGenresList.tvSeries' :value="genre.id">{{genre.name}}</option>
+                    </select>
+                </div>
+                <input type="text" placeholder="Cerca" v-model='searchInput' @keyup.enter="searchMoviesAndSeries()">
+                <button @click="searchMoviesAndSeries()"><i class="fas fa-search"></i></button>
+            </div>
+        </header>
+
+        <main>
+            <div class="ms_movies_container">
+                <ul>
+                    <li v-for='(movie, index) in moviesArray'
+                        v-if='useMovieFilter ? movie.genre_ids.includes(filmFilter) : "true"' :id='index'
+                        @mouseenter='showInfo(index)' @mouseleave='closeInfo(index)'>
+                        <div class="ms_movie_container">
+                            <img v-if='movie.poster_path' :src="getPoster(movie.poster_path)"
+                                class='ms_main_poster active' alt="">
+                            <img v-else
+                                src="https://i.pinimg.com/originals/a3/3c/4a/a33c4a17d7f167a6f39ab4fd90bdeb6b.jpg"
+                                class='ms_main_poster active' alt="">
+                            <div class="ms_infos">
+                                <h3>Titolo: {{movie.title}}</h3>
+                                <h3>Titolo originale: {{movie.original_title}}</h3>
+                                <div class="ms_genres" v-if='detailsReady'>
+                                    <ul>
+                                        <li>Genres:</li>
+                                        <li v-for='genre in movie.genres'>{{genre.name}}</li>
+                                    </ul>
+                                    <ul>
+                                        <li>Cast:</li>
+                                        <li v-if='movie.cast.length >= 1' v-for='actor in movie.cast.slice(0,5)'>
+                                            {{actor.name}}</li>
+                                        <li v-else>not found</li>
+                                    </ul>
+                                </div>
+                                <img v-if='flags.includes(movie.original_language)' class='flag'
+                                    :src='"../img/flags/" + movie.original_language + ".png"'
+                                    alt="movie.original_language">
+                                <h4 v-else>Language: {{movie.original_language}}</h4>
+                                <h4>Voto:
+                                    <i class="fas fa-star yellow"
+                                        v-for='number in (Math.round((movie.vote_average) / 2))'></i><i
+                                        class="far fa-star yellow"
+                                        v-for='number in  (5 - (Math.round((movie.vote_average) / 2)))'></i>
+                                </h4>
+                                <h4 v-if='movie.overview.length >= 1'>Overview: <span>{{movie.overview}}</span></h4>
+                                <h4 v-else>Overview non disponibile</h4>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="ms_tvseries_container">
+                <ul>
+                    <li v-for='(serie, index) in seriesArray'
+                        v-if='useSeriesFilter ? serie.genre_ids.includes(tvSeriesFilter) : "true"'
+                        :id='index + moviesArray.length' @mouseenter='showInfo(index + moviesArray.length)'
+                        @mouseleave='closeInfo(index + moviesArray.length)'>
+                        <div class="ms_serie_container">
+                            <img v-if='serie.poster_path' :src="getPoster(serie.poster_path)"
+                                class='ms_main_poster active' alt="">
+                            <img v-else
+                                src="https://i.pinimg.com/originals/a3/3c/4a/a33c4a17d7f167a6f39ab4fd90bdeb6b.jpg"
+                                class='ms_main_poster active' alt="">
+                            <div class="ms_infos">
+                                <h3>Titolo: {{serie.name}}</h3>
+                                <h3>Titolo originale: {{serie.original_name}}</h3>
+                                <div class="ms_genres" v-if='detailsReady'>
+                                    <ul>
+                                        <li>Genres:</li>
+                                        <li v-for='genre in serie.genres'>{{genre.name}}</li>
+                                    </ul>
+                                    <ul>
+                                        <li>Cast:</li>
+                                        <li v-if='serie.cast.length >= 1' v-for='actor in serie.cast.slice(0,5)'>
+                                            {{actor.name}}</li>
+                                        <li v-else>not found</li>
+                                    </ul>
+                                </div>
+                                <img v-if='flags.includes(serie.original_language)' class='flag'
+                                    :src='"../img/flags/" + serie.original_language + ".png"'
+                                    alt="serie.original_language">
+                                <h4 v-else>Language: {{serie.original_language}}</h4>
+                                <h4>Voto:
+                                    <i class="fas fa-star yellow"
+                                        v-for='number in (Math.round((serie.vote_average) / 2))'></i>
+                                </h4>
+                                <h4 v-if='serie.overview.length >= 1'>Overview: <span>{{serie.overview}}</span></h4>
+                                <h4 v-else>Overview non disponibile</h4>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </main>
+
+    </div>
+
+    <script src="js/script_bonus.js"></script>
+</body>
+</html>

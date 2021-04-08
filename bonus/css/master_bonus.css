@@ -1,0 +1,125 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Header */
+header {
+    width: 100%;
+    height: 5vh;
+    max-height: 150px;
+    background-color: #000;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header img {
+    height: 3vh;
+    max-height: 120px;
+}
+
+.ms_searchbar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.ms_searchbar .ms_filter {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    text-align: center;
+}
+.ms_searchbar .ms_filter label {
+    color: #fff;
+}
+.ms_searchbar .ms_filter select {
+    margin-bottom: 8px;
+}
+
+.ms_searchbar input,
+.ms_searchbar button {
+    padding: 5px 10px;
+}
+
+.ms_searchbar input {
+    margin-right: 15px;
+}
+
+/* Main */
+main {
+    width: 100%;
+    min-height: 95vh;
+    background-color: rgb(163, 163, 163);
+}
+
+.ms_main_poster {
+    height: 517px;
+    width: 342px;
+    border: 2px solid #fff;
+}
+
+.ms_movies_container ul,
+.ms_tvseries_container ul {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.ms_movies_container ul li,
+.ms_tvseries_container ul li {
+    margin: 30px 20px;
+    display: inline-block;
+}
+
+i.fa-star.yellow {
+    color: rgb(250, 206, 93);
+}
+
+.ms_infos {
+    display: none;
+    width: 342px;
+    height: 517px;
+    border: 2px solid #fff;
+    padding: 10px 15px;
+    background-color: #000;
+    color: #fff;
+    overflow-y: auto;
+}
+.ms_infos span {
+    font-weight: 400;
+}
+
+img.ms_main_poster {
+    display: none;
+}
+
+img.ms_main_poster.active,
+.ms_infos.active {
+    display: inline-block;
+}
+
+.ms_genres ul {
+    display: inline-block;
+    list-style: none;
+}
+.ms_genres ul li {
+    margin: 0 3px 0 0;
+}
+.ms_genres ul li:first-child {
+    font-weight: 600;
+    font-size: 1.2em;
+}
+.ms_genres li:not(:last-child,:first-child)::after {
+    content: ',';
+} 
+.ms_genres li:last-child::after {
+    content: '.';
+}
+
+img.flag {
+    width: 80px;
+}
