@@ -60,7 +60,8 @@ var app = new Vue({
         tvSeriesFilter: '',
         moviesArray: [],
         seriesArray: [],
-        detailsReady: false
+        detailsReady: false,
+        endIntro: false,
     },
     created() {
         axios
@@ -83,6 +84,9 @@ var app = new Vue({
             .then(function (result) {
                 app.totalGenresList.tvSeries = result.data.genres;
             })
+        setTimeout(() => {
+            app.endIntro = true;
+        }, 4200);
     },
     methods: {
         searchMoviesAndSeries: function () {
