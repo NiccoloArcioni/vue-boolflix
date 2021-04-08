@@ -22,18 +22,18 @@
         <header>
             <img src="img/boolflix.png" alt="BoolFlix logo">
             <div class="ms_searchbar">
-                <div class="ms_filter">
+                <div class="ms_filter" v-if='detailsReady'>
                     <label for="film">Filtra film</label>
                     <select name="film" id="filmPicker" @change='setFilmFilter()'>
-                        <option value="">All</option>
-                        <option v-for='genre in totalGenresList[0]' :value="genre.name">{{genre.name}}</option>
+                        <option value="All">All</option>
+                        <option v-for='genre in totalGenresList.movie' :value="genre.id">{{genre.name}}</option>
                     </select>
                 </div>
-                <div class="ms_filter">
+                <div class="ms_filter" v-if='detailsReady'>
                     <label for="tvSeries">Filtra TV Series</label>
                     <select name="tvSeries" id="tvSeriesPicker" @change='setTvSeriesFilter()'>
-                        <option value="">All</option>
-                        <option v-for='genre in totalGenresList[1]' :value="genre.name">{{genre.name}}</option>
+                        <option value="All">All</option>
+                        <option v-for='genre in totalGenresList.tvSeries' :value="genre.id">{{genre.name}}</option>
                     </select>
                 </div>
                 <input type="text" placeholder="Cerca" v-model='searchInput' @keyup.enter="searchMoviesAndSeries()">
@@ -44,9 +44,10 @@
         <main>
             <div class="ms_movies_container">
                 <ul>
-                    <li v-for='(movie, index) in moviesArray' :id='index' @mouseenter='showInfo(index)' @mouseleave='closeInfo(index)'>
+                    <li v-for='(movie, index) in moviesArray' v-if='useMovieFilter ? movie.genre_ids.includes(filmFilter) : "true"' :id='index' @mouseenter='showInfo(index)' @mouseleave='closeInfo(index)'>
                         <div class="ms_movie_container">
-                            <img :src="mainPath + posterWidth + movie.poster_path" class='ms_main_poster active' alt="">
+                            <img v-if='movie.poster_path' :src="getPoster(movie.poster_path)" class='ms_main_poster active' alt="">
+                            <img v-else src="https://i.pinimg.com/originals/a3/3c/4a/a33c4a17d7f167a6f39ab4fd90bdeb6b.jpg" class='ms_main_poster active' alt="">
                             <div class="ms_infos">
                                 <h3>Titolo: {{movie.title}}</h3>
                                 <h3>Titolo originale: {{movie.original_title}}</h3>
@@ -57,15 +58,17 @@
                                     </ul>
                                     <ul>
                                         <li>Cast:</li>
-                                        <li v-for='actor in movie.cast.slice(0,5)'>{{actor.name}}</li>
+                                        <li v-if='movie.cast.length >= 1' v-for='actor in movie.cast.slice(0,5)'>{{actor.name}}</li>
+                                        <li v-else>not found</li>
                                     </ul>
                                 </div>
-                                <img :src='"https://www.countryflags.io/" + movie.original_language + "/shiny/64.png"'
-                                    alt="movie.original_language">
+                                <img v-if='flags.includes(movie.original_language)' class='flag' :src='"img/flags/" + movie.original_language + ".png"' alt="movie.original_language">
+                                <h4 v-else>Language: {{movie.original_language}}</h4>
                                 <h4>Voto:
                                     <i class="fas fa-star yellow" v-for='number in (Math.round((movie.vote_average) / 2))'></i><i class="far fa-star yellow" v-for='number in  (5 - (Math.round((movie.vote_average) / 2)))'></i>
                                 </h4>
                                 <h4 v-if='movie.overview.length >= 1'>Overview: <span>{{movie.overview}}</span></h4>
+                                <h4 v-else>Overview non disponibile</h4>
                             </div>
                         </div>
                     </li>
@@ -73,9 +76,10 @@
             </div>
             <div class="ms_tvseries_container">
                 <ul>
-                    <li v-for='(serie, index) in seriesArray' :id='index + moviesArray.length' @mouseenter='showInfo(index + moviesArray.length)' @mouseleave='closeInfo(index + moviesArray.length)'>
+                    <li v-for='(serie, index) in seriesArray' v-if='useSeriesFilter ? serie.genre_ids.includes(tvSeriesFilter) : "true"' :id='index + moviesArray.length' @mouseenter='showInfo(index + moviesArray.length)' @mouseleave='closeInfo(index + moviesArray.length)'>
                         <div class="ms_serie_container">
-                            <img :src="mainPath + posterWidth + serie.poster_path" class='ms_main_poster active' alt="">
+                            <img v-if='serie.poster_path' :src="getPoster(serie.poster_path)" class='ms_main_poster active' alt="">
+                            <img v-else src="https://i.pinimg.com/originals/a3/3c/4a/a33c4a17d7f167a6f39ab4fd90bdeb6b.jpg" class='ms_main_poster active' alt="">
                             <div class="ms_infos">
                                 <h3>Titolo: {{serie.name}}</h3>
                                 <h3>Titolo originale: {{serie.original_name}}</h3>
@@ -86,15 +90,18 @@
                                     </ul>
                                     <ul>
                                         <li>Cast:</li>
-                                        <li v-for='actor in serie.cast.slice(0,5)'>{{actor.name}}</li>
+                                        <li v-if='serie.cast.length >= 1' v-for='actor in serie.cast.slice(0,5)'>{{actor.name}}</li>
+                                        <li v-else>not found</li>
                                     </ul>
                                 </div>
-                                <img :src='"https://www.countryflags.io/" + serie.original_language + "/shiny/64.png"'
+                                <img v-if='flags.includes(serie.original_language)' class='flag' :src='"img/flags/" + serie.original_language + ".png"'
                                     alt="serie.original_language">
+                                <h4 v-else>Language: {{serie.original_language}}</h4>
                                 <h4>Voto:
                                     <i class="fas fa-star yellow" v-for='number in (Math.round((serie.vote_average) / 2))'></i>
                                 </h4>
                                 <h4 v-if='serie.overview.length >= 1'>Overview: <span>{{serie.overview}}</span></h4>
+                                <h4 v-else>Overview non disponibile</h4>
                             </div>
                         </div>
                     </li>

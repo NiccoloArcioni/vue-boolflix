@@ -119,3 +119,7 @@ img.ms_main_poster.active,
 .ms_genres li:last-child::after {
     content: '.';
 }
+
+img.flag {
+    width: 80px;
+}
