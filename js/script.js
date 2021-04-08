@@ -54,6 +54,8 @@ var app = new Vue ({
             'vi',
             'zh'
         ],
+        useMovieFilter: false,
+        useSeriesFilter: false,
         filmFilter: '',
         tvSeriesFilter: '',
         moviesArray: [],
@@ -164,11 +166,31 @@ var app = new Vue ({
         },
         setFilmFilter: function() {
             let value = document.getElementById('filmPicker').value;
-            this.filmFilter = value;
+            if (value != 'All') {
+                this.useMovieFilter = true;
+                this.totalGenresList.movie.forEach((element) => {
+                    if (element.id == value) {
+                        this.filmFilter = element.id;
+                    }
+                })
+            } else {
+                this.useMovieFilter = false;
+                this.filmFilter = '';
+            }
         },
         setTvSeriesFilter: function () {
             let value = document.getElementById('tvSeriesPicker').value;
-            this.tvSeriesFilter = value;
+            if (value != 'All') {
+                this.useSeriesFilter = true;
+                this.totalGenresList.tvSeries.forEach((element) => {
+                    if (element.id == value) {
+                        this.tvSeriesFilter = element.id;
+                    }
+                })
+            } else {
+                this.useSeriesFilter = false;
+                this.filmFilter = '';
+            }
         }
     }
 })
