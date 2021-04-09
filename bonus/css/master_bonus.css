@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+body {
+    font-family: 'Roboto Mono', monospace;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
@@ -70,7 +74,7 @@ main {
     width: 100%;
     min-height: 90vh;
     background-image: linear-gradient(180deg, #000, #161313);
-    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 .ms_banner {
@@ -127,6 +131,13 @@ main {
     margin: 30px 0;
     display: inline-block;
 }
+.ms_movies_container ul li:first-child,
+.ms_tvseries_container ul li:first-child {
+    margin-right: 94%;
+    color: #fff;
+    font-size: xx-large;
+    text-shadow: 1px 6px 12px #360101;
+}
 
 i.fa-star.yellow {
     color: rgb(250, 206, 93);
@@ -142,6 +153,7 @@ i.fa-star.yellow {
     color: #fff;
     border-radius: 10px;
     overflow-y: auto;
+    overflow-x: hidden;
     transition: 0.6s;
 }
 .ms_infos:hover {

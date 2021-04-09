@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
         integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
         crossorigin="anonymous" />
@@ -16,12 +20,17 @@
     <title>BoolFlix Bonus</title>
 </head>
 <body>
-
+    <!-- root -->
     <div id="root">
+        <!-- main page -->
         <div class="dom_container" v-if='endIntro'>
+            <!--start header -->
             <header>
+                <!-- logo img -->
                 <img src="../img/boolflix.png" alt="BoolFlix logo">
+                <!-- searchbar -->
                 <div class="ms_searchbar">
+                    <!-- movie filter -->
                     <div class="ms_filter" v-if='detailsReady'>
                         <label for="film">Filtra film</label>
                         <select name="film" id="filmPicker" @change='setFilmFilter()'>
@@ -29,6 +38,7 @@
                             <option v-for='genre in totalGenresList.movie' :value="genre.id">{{genre.name}}</option>
                         </select>
                     </div>
+                    <!-- tv series filter -->
                     <div class="ms_filter" v-if='detailsReady'>
                         <label for="tvSeries">Filtra TV Series</label>
                         <select name="tvSeries" id="tvSeriesPicker" @change='setTvSeriesFilter()'>
@@ -36,12 +46,16 @@
                             <option v-for='genre in totalGenresList.tvSeries' :value="genre.id">{{genre.name}}</option>
                         </select>
                     </div>
+                    <!-- search -->
                     <input type="text" placeholder="Cerca" v-model='searchInput' @keyup.enter="searchMoviesAndSeries()">
                     <button @click="searchMoviesAndSeries()"><i class="fas fa-search"></i></button>
                 </div>
             </header>
-            
+            <!-- end header -->
+
+            <!-- start main -->
             <main>
+                <!-- video banner and text-->
                 <div class="ms_banner">
                     <video id="banner_video" playsinline autoplay muted loop>
                         <source src="videos/bannerVideo.mp4" type="video/mp4">
@@ -51,16 +65,18 @@
                         <p>Il mondo del cinema a portata di un click</p>
                     </div>
                 </div>
+                <!-- movies container -->
                 <div class="ms_movies_container">
                     <ul>
+                        <li v-if='searchDone'><h2>Movies</h2></li>
                         <li v-for='(movie, index) in moviesArray'
                             v-if='useMovieFilter ? movie.genre_ids.includes(filmFilter) : "true"' :id='index'
                             @mouseenter='showInfo(index)' @mouseleave='closeInfo(index)'>
                             <div class="ms_movie_container">
-                                <img v-if='movie.poster_path' :src="getPoster(movie.poster_path)" class='ms_main_poster active'
-                                    alt="">
-                                <img v-else src="https://i.pinimg.com/originals/a3/3c/4a/a33c4a17d7f167a6f39ab4fd90bdeb6b.jpg"
-                                    class='ms_main_poster active' alt="">
+                                <!-- poster img -->
+                                <img v-if='movie.poster_path' :src="getPoster(movie.poster_path)" class='ms_main_poster active' alt="">
+                                <img v-else src="https://i.pinimg.com/originals/a3/3c/4a/a33c4a17d7f167a6f39ab4fd90bdeb6b.jpg" class='ms_main_poster active' alt="">
+                                <!-- back infos -->
                                 <div class="ms_infos">
                                     <h3>Titolo: {{movie.title}}</h3>
                                     <h3>Titolo originale: {{movie.original_title}}</h3>
@@ -76,14 +92,10 @@
                                             <li v-else>not found</li>
                                         </ul>
                                     </div>
-                                    <img v-if='flags.includes(movie.original_language)' class='flag'
-                                        :src='"../img/flags/" + movie.original_language + ".png"' alt="movie.original_language">
+                                    <img v-if='flags.includes(movie.original_language)' class='flag' :src='"../img/flags/" + movie.original_language + ".png"' alt="movie.original_language">
                                     <h4 v-else>Language: {{movie.original_language}}</h4>
                                     <h4>Voto:
-                                        <i class="fas fa-star yellow"
-                                            v-for='number in (Math.round((movie.vote_average) / 2))'></i><i
-                                            class="far fa-star yellow"
-                                            v-for='number in  (5 - (Math.round((movie.vote_average) / 2)))'></i>
+                                        <i class="fas fa-star yellow" v-for='number in (Math.round((movie.vote_average) / 2))'></i><i class="far fa-star yellow" v-for='number in  (5 - (Math.round((movie.vote_average) / 2)))'></i>
                                     </h4>
                                     <h4 v-if='movie.overview.length >= 1'>Overview: <span>{{movie.overview}}</span></h4>
                                     <h4 v-else>Overview non disponibile</h4>
@@ -92,17 +104,19 @@
                         </li>
                     </ul>
                 </div>
+                <!-- tv series container -->
                 <div class="ms_tvseries_container">
                     <ul>
+                        <li v-if='searchDone'><h2>Tv Series</h2></li>
                         <li v-for='(serie, index) in seriesArray'
                             v-if='useSeriesFilter ? serie.genre_ids.includes(tvSeriesFilter) : "true"'
                             :id='index + moviesArray.length' @mouseenter='showInfo(index + moviesArray.length)'
                             @mouseleave='closeInfo(index + moviesArray.length)'>
                             <div class="ms_serie_container">
-                                <img v-if='serie.poster_path' :src="getPoster(serie.poster_path)" class='ms_main_poster active'
-                                    alt="">
-                                <img v-else src="https://i.pinimg.com/originals/a3/3c/4a/a33c4a17d7f167a6f39ab4fd90bdeb6b.jpg"
-                                    class='ms_main_poster active' alt="">
+                                <!-- poster img -->
+                                <img v-if='serie.poster_path' :src="getPoster(serie.poster_path)" class='ms_main_poster active' alt="">
+                                <img v-else src="https://i.pinimg.com/originals/a3/3c/4a/a33c4a17d7f167a6f39ab4fd90bdeb6b.jpg" class='ms_main_poster active' alt="">     
+                                <!-- back infos -->
                                 <div class="ms_infos">
                                     <h3>Titolo: {{serie.name}}</h3>
                                     <h3>Titolo originale: {{serie.original_name}}</h3>
@@ -118,11 +132,10 @@
                                             <li v-else>not found</li>
                                         </ul>
                                     </div>
-                                    <img v-if='flags.includes(serie.original_language)' class='flag'
-                                        :src='"../img/flags/" + serie.original_language + ".png"' alt="serie.original_language">
+                                    <img v-if='flags.includes(serie.original_language)' class='flag' :src='"../img/flags/" + serie.original_language + ".png"' alt="serie.original_language">
                                     <h4 v-else>Language: {{serie.original_language}}</h4>
                                     <h4>Voto:
-                                        <i class="fas fa-star yellow" v-for='number in (Math.round((serie.vote_average) / 2))'></i>
+                                        <i class="fas fa-star yellow" v-for='number in (Math.round((serie.vote_average) / 2))'></i><i class="far fa-star yellow" v-for='number in  (5 - (Math.round((serie.vote_average) / 2)))'></i>
                                     </h4>
                                     <h4 v-if='serie.overview.length >= 1'>Overview: <span>{{serie.overview}}</span></h4>
                                     <h4 v-else>Overview non disponibile</h4>
@@ -132,16 +145,17 @@
                     </ul>
                 </div>
             </main>
+            <!-- end main -->
         </div>
 
+        <!-- intro video -->
         <div class="intro_animation" v-else>
             <video id="intro_video" playsinline autoplay muted loop>
                 <source src="videos/introAnimation.mp4" type='video/mp4'>
             </video>
         </div>
-
     </div>
-
+    <!-- /root -->
     <script src="js/script_bonus.js"></script>
 </body>
 </html>

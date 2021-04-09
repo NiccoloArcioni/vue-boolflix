@@ -2,6 +2,7 @@ var app = new Vue({
     el: '#root',
     data: {
         searchInput: '',
+        searchDone: false,
         mainPath: 'https://image.tmdb.org/t/p/',
         posterWidth: 'w342',
         totalGenresList: {},
@@ -90,7 +91,8 @@ var app = new Vue({
     },
     methods: {
         searchMoviesAndSeries: function () {
-            app.detailsReady = false;
+            this.searchDone = true;
+            this.detailsReady = false;
             if (this.searchInput.length >= 1) {
                 axios
                     .get('https://api.themoviedb.org/3/search/movie?', {
