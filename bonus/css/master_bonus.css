@@ -122,6 +122,7 @@ main {
 .ms_tvseries_container ul {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     width: 90%;
     margin: 0 auto;
 }
@@ -133,7 +134,7 @@ main {
 }
 .ms_movies_container ul li:first-child,
 .ms_tvseries_container ul li:first-child {
-    margin-right: 94%;
+    margin-right: 90%;
     color: #fff;
     font-size: xx-large;
     text-shadow: 1px 6px 12px #360101;

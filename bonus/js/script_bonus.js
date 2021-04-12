@@ -195,8 +195,10 @@ var app = new Vue({
                 })
             } else {
                 this.useSeriesFilter = false;
-                this.filmFilter = '';
+                this.tvSeriesFilter = '';
             }
         }
     }
 })
+
+/* Aggiungere semaforo boleano ad ogni then al posto del setTimeout */
